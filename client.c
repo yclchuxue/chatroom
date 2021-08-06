@@ -76,13 +76,9 @@ int main()
 		}while(1);
 
 		do{  
-			//printf("QQQQQQ\n");                                                //************************************************
 			int ice;
 			setbuf(stdin, NULL);
-			//system("clear");
-			//printf("RRRRRRRRRRRRR\n");
 			printf("\033c");
-			//printf("KKKKKKKKKKKK\n");
 			get_XX(socket_fd);
 			memset(&YY, 0, sizeof(XINXI));
 			printf("\t\t*************************************\n");
