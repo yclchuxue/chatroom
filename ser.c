@@ -2351,7 +2351,7 @@ int  denglu(XINXI *YY,int sfd)            //登陆
     }
     else if(atoi(res_row[0]) == 1)
     {
-        sprintf(B, "该帐号已在其他地方登陆！");
+        sprintf(B, "该帐号已在其他地方登录！");
     }
     else
     {
@@ -2371,7 +2371,7 @@ int  denglu(XINXI *YY,int sfd)            //登陆
             mysql_query(conn, A);
             sprintf(A, "update student set fd=%d where id = %d", sfd, YY->m_id);        //在线状态
             mysql_query(conn, A);
-            strncpy(B,"登陆成功",50);
+            strncpy(B,"登录成功",50);
             ret = 1;
         }
         mysql_free_result(res_ptr);
