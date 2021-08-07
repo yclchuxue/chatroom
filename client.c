@@ -45,7 +45,7 @@ int main()
 			YY.ice_1 = 1;
 			printf("\033c");
 			face(&YY);     //1        2       3          0
-			if(YY.ice_2 == 11)             //登陆
+			if(YY.ice_2 == 11)             //登录
 			{
 				printf("\033c");
 				C_denn(&YY, socket_fd);
