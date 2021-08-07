@@ -1117,7 +1117,7 @@ void C_denn(XINXI *YY, int socket_fd)
 		setbuf(stdin, NULL);
 		getchar();
 		setbuf(stdin, NULL);
-	}while(strcmp(buf,"登陆成功") != 0);
+	}while(strcmp(buf,"登录成功") != 0);
 	//printf("AAAA\n");
 }
 
@@ -1398,7 +1398,7 @@ void face(XINXI *YY)
 		setbuf(stdin, NULL);
 		printf("\033c");
 		printf("\t\t/*******************************/\n");
-		printf("\t\t/**************1 登陆**************/\n");
+		printf("\t\t/**************1 登录**************/\n");
     	printf("\t\t/**************2 注册**************/\n");
 	    printf("\t\t/************3 找回密码*************/\n");
 		printf("\t\t/************0 退出程序*************/\n");
