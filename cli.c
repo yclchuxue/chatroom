@@ -33,14 +33,14 @@ void C_document(XINXI *YY, int socket_fd)
 	printf("\t\t********************0 退出     *********************\n");
 	printf("\t\t请输入你的选择：");
 	scanf("%d", &n);
-	printf("\t\t请输入好友ID：");
-	scanf("%d", &id);
-	YY->y_id = id;
 	if(n == 0)
 	{
 		return ;
 	}
-	else if(n == 1)     //文件发送
+	printf("\t\t请输入好友ID：");
+	scanf("%d", &id);
+	YY->y_id = id;
+	if(n == 1)     //文件发送
 	{
 
 		setbuf(stdin, NULL);
@@ -1328,7 +1328,7 @@ void C_haoyouliaot(XINXI *YY, DENN *XX, int socket_fd)
 void C_zhuce(XINXI *YY, int socket_fd)
 {
 	int I;
-	char P[16],buf[50],name[20],qu[200],an[100],hylb[20];
+	char P[16],buf[100],name[20],qu[200],an[100],hylb[20];
 	
 		setbuf(stdin, NULL);
 		printf("\033c");
@@ -1349,9 +1349,10 @@ void C_zhuce(XINXI *YY, int socket_fd)
 		strncpy(YY->qu, qu, sizeof(qu));
 		strncpy(YY->an, an, sizeof(an));
 		strncpy(YY->hylb, hylb, sizeof(hylb));          //好友列表，以name为mysql—table名
+		
 		send(socket_fd, YY, sizeof(XINXI),0);
 		//printf("YY->m_id = %d\n",YY->m_id);
-		read(socket_fd,buf, sizeof(buf));
+		recv(socket_fd,buf, sizeof(buf),0);
 		printf("\t\t%s\n",buf);
 		printf("\t\t请输入enter继续!!!\n");
 		setbuf(stdin, NULL);
