@@ -3,7 +3,7 @@
 void Document(XINXI *YY, int sfd, E_LIST *p)
 {
     int ret, fd, dfd;
-	char A[100];
+	char A[200];
     char file_len[16], file_name[128], buf[1024],file_new_name[128],sign[10];
 
     if(YY->ice_2 == 71)        //接收来自客户端的文件
@@ -173,7 +173,7 @@ void Document(XINXI *YY, int sfd, E_LIST *p)
 
 void login(XINXI *YY, int sfd)
 {
-    char A[100];
+    char A[200];
     time_t timep_1;
     time(&timep_1);
     struct tm *p;
@@ -259,7 +259,7 @@ void login(XINXI *YY, int sfd)
 void *thread_account(void *arg)
 {
     //printf("YYYYYYYYYYYYYYYYYYY\n");
-    char A[100];
+    char A[200];
     int nready,i, n, ret, sfd;
     DENN *XX = (DENN*)malloc(sizeof(DENN));
     LIAOT *XZ = (LIAOT*)malloc(sizeof(LIAOT));
@@ -285,7 +285,9 @@ void *thread_account(void *arg)
     //sprintf(A, "update student set zt=0");      //服务器重启，所有用户都不在线
     //mysql_query(conn,A);
 */
-    E_LIST *p = (E_LIST *)arg;
+    E_LIST *p = (E_LIST *)malloc(sizeof(E_LIST));
+    p = (E_LIST *)arg;
+    
 
     while(p->sum == 0)
     {
@@ -302,10 +304,14 @@ void *thread_account(void *arg)
 
     while(1)
     {
-        //printf("A\n");
+        printf("Q\n");
+        printf("size = %d\n", sizeof(p));
+        printf("sum = %d\n", p->sum);
+        printf("p->efd = %d\n", p->efd);
+        sleep(1);
         nready = epoll_wait(p->efd, p->ep, OPEN_MAX, -1);     //等待就绪套接字，将就绪套接字放入响应队列，返回响应套接字的个数
         //printf("nready = %d\n", nready);
-        //printf("errno is: %d\n",errno);
+        //printf("errno is: %s\n",errno);
         for(i = 0; i < nready; i++)
         {
             //printf("B\n");
@@ -321,7 +327,7 @@ void *thread_account(void *arg)
                 //TX(&YY);
                 login(&YY, sfd);
                 //printf("%d\n", n);
-                //TX(&YY);
+                TX(&YY);
                 if(n == 0)         //客户端关闭
                 {
                     //printf("qu\n");
@@ -339,7 +345,7 @@ void *thread_account(void *arg)
                     //printf("YY->ice = %d\n", YY.ice);
                     if(YY.ice_1 == 1)          //登陆，注册，找回密码
                     {
-                        int ret = 0;
+                        ret = 0;
                         if(YY.ice_2 == 11)       //登陆
                         {
                             //printf("id = %d\tice = %d\n", XX->id, XX->ice);
@@ -347,8 +353,8 @@ void *thread_account(void *arg)
                         }
                         else if(YY.ice_2 == 12)      //注册
                         {
-                            ret = zhuce(&YY, sfd);
-                            //printf("QQQQQQQ\n");
+                            zhuce(&YY, sfd);
+                            TX(&YY);
                         }
                         else if(YY.ice_2 == 13)      //找回密码
                         { 
@@ -432,11 +438,11 @@ void *thread_account(void *arg)
                         get_TZ(&YY, sfd);
                     }
                 }
-                //printf("a\n");
+                printf("a\n");
             }
-            //printf("b\n");
+            printf("b\n");
         }
-        //printf("c\n");
+        printf("c\n");
     }
     //printf("d\n");
     free(XX);
@@ -444,7 +450,7 @@ void *thread_account(void *arg)
 
 void getDENN(DENN *XX, int id, int sfd)
 {
-    char A[100];
+    char A[200];
     int ret;
     memset(XX, 0, sizeof(DENN));
     XX->id = id;              //将m_id存入XX中
@@ -476,7 +482,7 @@ void getDENN(DENN *XX, int id, int sfd)
 char *getname_from_id(int id)
 {
     int ret;
-    char A[100], *name = (char *) malloc(sizeof(char)*20);
+    char A[200], *name = (char *) malloc(sizeof(char)*20);
     //获取name
     MYSQL_RES *res_ptr;
     MYSQL_ROW  res_row;
@@ -523,7 +529,7 @@ char *getjl_from_id(int id_I, int id_II)
 
 int getid_from_beizhu(int id,char *beizhu)
 {
-    char A[100];
+    char A[200];
     int ID;
     int ret;
     sprintf(A, "select id from %shylb where beizhu = '%s'", getname_from_id(id), beizhu);
@@ -546,7 +552,7 @@ int getid_from_beizhu(int id,char *beizhu)
 
 char *getbeizhu_from_id(int m_id,int id)
 {
-    char A[100],*beizhu = (char *) malloc(sizeof(char)*20);
+    char A[200],*beizhu = (char *) malloc(sizeof(char)*20);
     int ret;
     sprintf(A, "select beizhu from %shylb where id = %d", getname_from_id(m_id), id);
     ret = mysql_query(conn,A);
@@ -566,7 +572,7 @@ char *getbeizhu_from_id(int m_id,int id)
 
 char *getgroupname_from_id(int id)
 {
-    char A[100], *name = (char *) malloc(sizeof(char)*20);
+    char A[200], *name = (char *) malloc(sizeof(char)*20);
     int ret;
     sprintf(A, "select name from allgroup where id = %d", id);
     ret = mysql_query(conn,A);
@@ -585,7 +591,7 @@ char *getgroupname_from_id(int id)
 
 char *getgroupjl_from_id(int id)
 {
-    char A[100], *jl = (char *) malloc(sizeof(char)*20);
+    char A[200], *jl = (char *) malloc(sizeof(char)*20);
     int ret;
     sprintf(A, "select jl from allgroup where id = %d", id);
     ret = mysql_query(conn,A);
@@ -604,7 +610,7 @@ char *getgroupjl_from_id(int id)
 
 void get_TZ(XINXI *YY, int sfd)
 {
-    char A[100],B[50], ch;
+    char A[200],B[50], ch;
     int ret, field, sum = 0, m = 0;
     LIAOT *XZ = (LIAOT*)malloc(sizeof(LIAOT));
     sprintf(A, "select message from box where end_id = %d", YY->m_id);
@@ -771,7 +777,7 @@ int G_ADD(XINXI *YY, DENN *XX)
 {
     int field, fd, ret;
 
-    char B[50], name[20], A[100];
+    char B[50], name[20], A[200];
     MYSQL_RES *res_ptr;
     MYSQL_ROW  res_row;
     strncpy(name, getgroupname_from_id(YY->q_id), sizeof(name));
@@ -816,7 +822,7 @@ int G_ADD(XINXI *YY, DENN *XX)
 
 void G_ADD_1(XINXI *YY, int sfd)        //问题回答
 {
-    char A[100],name[20],B[50];
+    char A[200],name[20],B[50];
     if(YY->zt == 1)     
     {
         int ret_1, ret_2, ret_3;
@@ -835,7 +841,7 @@ void G_ADD_1(XINXI *YY, int sfd)        //问题回答
 
 int group_1(DENN *XX, XINXI *YY, int sfd)      //群管理
 {
-    char A[100],B[50],name[20],ch;
+    char A[200],B[50],name[20],ch;
     int ret, id, ret_1, ret_2, ret_3, ret_4, field;
     LIAOT *XZ = (LIAOT*)malloc(sizeof(LIAOT));
     YY->m_id = XX->id;
@@ -1374,7 +1380,7 @@ int group_1(DENN *XX, XINXI *YY, int sfd)      //群管理
 void G_send(XINXI *YY, int sfd)
 {
     //printf("AAA\n");
-    char A[100];
+    char A[200];
     int day, time_1, ret, sum = 0, i;
     sprintf(A, "select day from %scylb where id = %d", getgroupname_from_id(YY->q_id), YY->m_id);
     ret = mysql_query(conn,A);
@@ -1507,7 +1513,7 @@ void G_send(XINXI *YY, int sfd)
 
 void G_get(XINXI *YY, int sfd)
 {
-    char A[100];
+    char A[200];
     time_t timep_1;
     time(&timep_1);
     struct tm *p;
@@ -1528,7 +1534,7 @@ int group_2(DENN *XX, XINXI *YY, int sfd)      //群聊天
 {
     //printf("YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY\n");
     int ret;
-    char A[100], B[50];
+    char A[200], B[50];
     YY->m_id = XX->id;
     if(YY->ice_2 == 41)
     {
@@ -1558,7 +1564,7 @@ int group_2(DENN *XX, XINXI *YY, int sfd)      //群聊天
 
 int TongZ(XINXI *YY, int sfd)
 {
-    char A[100],B[50], ch;
+    char A[200],B[50], ch;
     int ret, field, sum = 0, q[20], m = 0;
     //printf("id = %d\n", YY->id);
     //printf("m_id = %d\n", YY->m_id);
@@ -1806,7 +1812,7 @@ int TongZ(XINXI *YY, int sfd)
 
 int set_1(int id)            //设置为忙碌
 {
-    char A[100];
+    char A[200];
     sprintf(A, "update student set sj = 1 where id = %d", id);
     int ret = mysql_query(conn,A);
     if(ret == 0)
@@ -1818,7 +1824,7 @@ int set_1(int id)            //设置为忙碌
 
 int drop_1(int id)           //设置为空闲
 {
-    char A[100];
+    char A[200];
     sprintf(A, "update student set sj = 0 where id = %d", id);
     int ret = mysql_query(conn,A);
     if(ret == 0)
@@ -1830,7 +1836,7 @@ int drop_1(int id)           //设置为空闲
 
 int panduan_1(int id)                  //判断客户是否空闲
 {
-    char A[100];
+    char A[200];
     int sj, res, field;
     //printf("HHH %d HHH\n", id);
     sprintf(A, "select sj from student where id = %d", id);
@@ -1865,7 +1871,7 @@ int ADD(XINXI *YY, DENN *XX)        //添加好友
 
     char B[50];
     sprintf(B, "用户%s请求添加你为好友！", XX->name);
-    char A[100];
+    char A[200];
     //printf("id = %d\n", XZ->id); 
     sprintf(A,"select * from %shylb where id = %d", getname_from_id(XX->id), YY->y_id);
     MYSQL_RES *res_ptr;
@@ -1923,7 +1929,7 @@ int ADD(XINXI *YY, DENN *XX)        //添加好友
 int xuanzhe_1(DENN *XX, XINXI *YY, int sfd)
 {   
     int ret;
-    char buf[50],A[100];
+    char buf[50],A[200];
     LIAOT *XZ = (LIAOT*)malloc(sizeof(LIAOT));
     
 
@@ -2195,7 +2201,7 @@ void HY_send(XINXI *YY,int sfd)                       //将未读信息发送给
     MYSQL_RES *res_ptr;
     MYSQL_ROW  res_row;
     LIAOT *XZ = (LIAOT*)malloc(sizeof(LIAOT));
-    char A[100],B[50],beizhu[20];
+    char A[200],B[50],beizhu[20];
     strncpy(YY->jl, getjl_from_id(YY->m_id, YY->y_id), sizeof(YY->jl));
     //printf("YY->jl = %s\tYY->m_id = %d\n",YY->jl,YY->m_id);
     sprintf(A, "select xinxi from %s where end_id = %d and zt = 1", YY->jl, YY->m_id);
@@ -2241,7 +2247,7 @@ void HY_send(XINXI *YY,int sfd)                       //将未读信息发送给
 void HY_get(XINXI *YY, int id, int sfd)
 {
     //printf("CCCCCCCCCCCcCCCCC\n");
-    char A[100];//B[50],buf[50],beizhu[20];
+    char A[200];//B[50],buf[50],beizhu[20];
     int ret;//,field,zt;   
     //TX(YY);
     //printf("YY->buf: %s\n", YY->buf);
@@ -2283,7 +2289,7 @@ void HY_get(XINXI *YY, int id, int sfd)
 int xuanzhe_2(DENN *XX, XINXI *YY, int sfd)
 {
     int id, ret;
-    char buf[50], A[100];
+    char buf[50], A[200];
     MYSQL_RES *res_ptr;
     MYSQL_ROW  res_row;
     //获取未浏览信息数量
@@ -2334,7 +2340,7 @@ int xuanzhe_2(DENN *XX, XINXI *YY, int sfd)
 int  denglu(XINXI *YY,int sfd)            //登陆
 {
     int row, res, ret;
-    char A[100],B[50];
+    char A[200],B[50];
     //printf("ID = %d\n", XX->id);
     sprintf(A, "select zt from student where id = %d", YY->m_id);
     MYSQL_RES *res_ptr;
@@ -2384,7 +2390,7 @@ int  denglu(XINXI *YY,int sfd)            //登陆
 void logof(XINXI *YY, int sfd)
 {
     int ret_1, ret_2;
-    char A[100];
+    char A[200];
     
     sprintf(A, "update student set zt = 0 where id = %d", YY->m_id);
     ret_1 = mysql_query(conn,A);        //用户退出，将状态设置为不在线
@@ -2400,40 +2406,37 @@ void logof(XINXI *YY, int sfd)
 int zhuce(XINXI *YY,int sfd)        //注册
 {
     int res, ret, ret_1, ret_2,ret_3;
-    char A[100],B[50];
+    char A[200],B[100];
     //printf("YY->m_id = %d\n", YY->m_id);
-    sprintf(A, "select id from student where id = %d", YY->m_id);
+    sprintf(A, "select * from student where id = %d", YY->m_id);
     MYSQL_RES *res_ptr;
     MYSQL_ROW  res_row;
     res = mysql_query(conn,A);
     res_ptr = mysql_store_result(conn);
     res_row = mysql_fetch_row(res_ptr);
     mysql_free_result(res_ptr);
-    if(res_row)
+    if(res_row != NULL)
     {
         //id已经存在
         ret = 0;
-        strncpy(B,"id已经被注册，请更换一个id",50);
+        strncpy(B,"id已经被注册，请更换一个id",100);
     }
     else
     {
-        sprintf(A, "select id from student where id = %d and name = %s", YY->m_id, YY->name);
+        sprintf(A, "select * from student where name =  '%s'", YY->name);
         res = mysql_query(conn,A);
+        //printf("A= %s\nres = %d\n", A, res);
         res_ptr = mysql_store_result(conn);
         res_row = mysql_fetch_row(res_ptr);
         mysql_free_result(res_ptr);
         if(res_row)                      //name已存在
         {
             ret = 0;
-            strncpy(B, "name已经被注册，请更换一个name", 50);
+            strncpy(B, "name已经被注册，请更换一个name", 100);
         }
         else
-        {
-            //strncpy(YY->hylb, YY->name, sizeof(YY->hylb));
-            //printf("AAA\n");
+        { 
             sprintf(A, "insert into student (id,password,name,qu,an,hylb,zt,sj,grouptable) values (%d, '%s', '%s', '%s', '%s', '%shylb', 0, 0, '%sgrouptable')",YY->m_id, YY->password,YY->name,YY->qu,YY->an, YY->name, YY->name);
-            //printf("%s\n",A);
-            //return 0;
             ret_1 = mysql_query(conn,A);
             //printf("ret_1 = %dBBB\n", ret_1);
             sprintf(A, "create table %s (id int, beizhu varchar(20), jl varchar(20), zt int)", YY->hylb);
@@ -2441,7 +2444,7 @@ int zhuce(XINXI *YY,int sfd)        //注册
             //printf("ret_2 = %dCCC\n", ret_2);
             sprintf(A, "create table %sgrouptable (id int, name varchar(20),sf int)", YY->name);
             ret_3 = mysql_query(conn,A);           //创建已加群列表
-            //printf("ret_3 = %dDDD\n", ret_3);
+            //printf("ret_3 = %dDDD\n", ret_3);   
             if(ret_1 == 0 && ret_2 == 0 && ret_3 == 0)
             {
                 ret = 1;
@@ -2455,7 +2458,7 @@ int zhuce(XINXI *YY,int sfd)        //注册
         }  
     }
     //printf("A\n");
-    write(sfd, B, sizeof(B));
+    send(sfd, B, sizeof(B), 0);
 
     return ret;
 }
@@ -2483,7 +2486,7 @@ int zhaohui(XINXI *YY,int sfd)           //找回密码
 int zhaohui_1(XINXI *YY,int sfd)           //找回密码
 {
     int ret,field;
-    char A[100],B[50];
+    char A[200],B[50];
     MYSQL_RES *res_ptr;
     MYSQL_ROW  res_row;
     sprintf(A,"select an from student where id = %d AND an = '%s'",YY->m_id, YY->an);
