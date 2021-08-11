@@ -12,7 +12,7 @@ int main()
         printf("mysql_init failed!!!\n");
         exit(1);
     }
-    conn = mysql_real_connect(conn,"127.0.0.1","root","181219","db1",0,NULL,0);  //连接数据库
+    conn = mysql_real_connect(conn,"127.0.0.1","ycl","121819","db1",0,NULL,0);  //连接数据库
     mysql_set_character_set(conn,"utf8");      //调整为中文字符
 
     if(conn == NULL)
