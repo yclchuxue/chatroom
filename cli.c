@@ -1164,7 +1164,7 @@ void *thread(void *arg)
 	XINXI YY;
 	do
 	{
-		sleep(3);
+		sleep(1);
 		//pthread_mutex_lock(&lock);              //加锁
 		YY.ice_4 = 666;
 		YY.ice_1 = 4;
@@ -1181,15 +1181,24 @@ void *thread(void *arg)
 		{
 			for(int i = 0;i<n;i++)
 			{
-				printf("\b\b\b\b\b\b                 \n");
+				//printf("\b\b\b\b\b\b                 \n");
 				char buf[1024]={0};
 				//read(socket_fd,buf,sizeof(buf));
 				recv(Socket_fd, &XZ, sizeof(LIAOT), 0);
 				sprintf(A, "\t\033[34m%s : %s\033[0m", XZ.beizhu, XZ.xinxi);
 				printf("%s", A);
 			}
-			printf("\t\033[31mMINE :");
+			//printf("\t\033[31mMINE :");
 		}
+		
+		if(strcmp(XZ.beizhu, "系统提醒！") == 0)
+		{
+			sprintf(A, "\t\033[34m%s : %s\033[0m", XZ.beizhu, XZ.xinxi);
+			printf("%s", A);
+			sleep(1);
+			break;
+		}
+		
 	} while (M == 1);       //退出线程
 }
 
@@ -1287,6 +1296,14 @@ void C_haoyouliaot(XINXI *YY, DENN *XX, int socket_fd)
 						setbuf(stdin, NULL);
 						fgets(Buf,200,stdin);
 						setbuf(stdin, NULL);
+						if(strlen(Buf) == 199 && Buf[199] != '\0')
+						{
+							Buf[198] = '\n';
+							Buf[199] = '\0';
+							//printf("你发送的信息太长，只发送了一部分请分开发送!\n");
+							//printf("已发送部分如下:\n");
+							//printf("%s\n", Buf);
+						}
 						/*
 						do
 						{
@@ -1298,6 +1315,7 @@ void C_haoyouliaot(XINXI *YY, DENN *XX, int socket_fd)
 							}
 						}while(ch != '\n');
 						*/
+					//printf("Buf = %s\n", Buf);
 						YY->ice_4 = 777;
 						YY->m_id  = M_ID;
 						strncpy(YY->buf, Buf, sizeof(Buf));
@@ -1310,11 +1328,14 @@ void C_haoyouliaot(XINXI *YY, DENN *XX, int socket_fd)
 							pthread_join(thid, NULL);   //销毁线程
 							return ;
 						}
-						if(strcmp(Buf, "\n") != 0)
+						//printf("%s\n", YY->buf);
+						if(strcmp(YY->buf, "\n") != 0)
+						{
 							ret = send(socket_fd, YY, sizeof(XINXI), 0);
+						}
 						//printf("buf = %sA\n", buf);
 
-
+						memset(YY->buf, 0, sizeof(YY->buf));
 						printf("\t\033[31mMINE: ");
 						N = 0;
 					}
