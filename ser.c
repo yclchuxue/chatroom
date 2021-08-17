@@ -1389,6 +1389,11 @@ void G_send(XINXI *YY, int sfd)
     {
         day  = atoi(res_row[0]);
     }
+    else
+    {
+        sum = -1;
+        send(sfd, &sum, sizeof(sum), 0);
+    }
     mysql_free_result(res_ptr);
 
     sprintf(A, "select time from %scylb where id = %d", getgroupname_from_id(YY->q_id), YY->m_id);
