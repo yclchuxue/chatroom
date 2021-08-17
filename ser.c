@@ -199,7 +199,10 @@ void login(XINXI *YY, int sfd)
     {
         YY->zt = 0;
     }
-    
+    if(YY->ice_4 == 666 || YY->ice_4 == 999)
+    {
+        return ;
+    }
     if(YY->ice_1 == 0 && YY->ice_2 == 0 && YY->ice_3 == 0 && YY->ice_4 == 0 && YY->m_id == 0 && YY->y_id == 0 && YY->q_id == 0 && YY->zt == 0)
     {
         time_t timep_1;
@@ -304,10 +307,6 @@ void *thread_account(void *arg)
 
     while(1)
     {
-        printf("Q\n");
-        printf("size = %d\n", sizeof(p));
-        printf("sum = %d\n", p->sum);
-        printf("p->efd = %d\n", p->efd);
         sleep(1);
         nready = epoll_wait(p->efd, p->ep, OPEN_MAX, -1);     //等待就绪套接字，将就绪套接字放入响应队列，返回响应套接字的个数
         //printf("nready = %d\n", nready);
@@ -327,15 +326,15 @@ void *thread_account(void *arg)
                 //TX(&YY);
                 login(&YY, sfd);
                 //printf("%d\n", n);
-                TX(&YY);
+                //TX(&YY);
                 if(n == 0)         //客户端关闭
                 {
                     //printf("qu\n");
                     ret = epoll_ctl(p->efd, EPOLL_CTL_DEL, sfd, NULL);    //将套接字sfd从等待队列中删除
                     
-                    sprintf(A, "update student set zt = 0 where id = %d", YY.m_id);
-                    mysql_query(conn,A);        //用户退出，将状态设置为不在线
-                    sprintf(A, "update student set fd = 0 where id = %d",YY.m_id);
+                    sprintf(A, "update student set zt = 0 where fd = %d", sfd);
+                    ret = mysql_query(conn,A);        //用户退出，将状态设置为不在线
+                    sprintf(A, "update student set fd = 0 where fd = %d", sfd);
                     mysql_query(conn,A);        //用户退出后将fd归0
 
                     close(sfd);        //关闭该套接字
@@ -438,11 +437,8 @@ void *thread_account(void *arg)
                         get_TZ(&YY, sfd);
                     }
                 }
-                printf("a\n");
             }
-            printf("b\n");
         }
-        printf("c\n");
     }
     //printf("d\n");
     free(XX);
@@ -1380,7 +1376,7 @@ int group_1(DENN *XX, XINXI *YY, int sfd)      //群管理
 void G_send(XINXI *YY, int sfd)
 {
     //printf("AAA\n");
-    char A[200];
+    char A[400];
     int day, time_1, ret, sum = 0, i;
     sprintf(A, "select day from %scylb where id = %d", getgroupname_from_id(YY->q_id), YY->m_id);
     ret = mysql_query(conn,A);
@@ -1513,7 +1509,7 @@ void G_send(XINXI *YY, int sfd)
 
 void G_get(XINXI *YY, int sfd)
 {
-    char A[200];
+    char A[400];
     time_t timep_1;
     time(&timep_1);
     struct tm *p;
@@ -2201,7 +2197,23 @@ void HY_send(XINXI *YY,int sfd)                       //将未读信息发送给
     MYSQL_RES *res_ptr;
     MYSQL_ROW  res_row;
     LIAOT *XZ = (LIAOT*)malloc(sizeof(LIAOT));
-    char A[200],B[50],beizhu[20];
+    char A[400],B[50],beizhu[20];
+    //printf("m_id = %d", YY->m_id);
+    sprintf(A, "select * from %shylb where id = %d", getname_from_id(YY->m_id), YY->y_id);
+    ret = mysql_query(conn, A);
+    //printf("%s\n%d\n", A, ret);
+    
+    res_ptr = mysql_store_result(conn);
+    res_row = mysql_fetch_row(res_ptr);
+    if(res_row == NULL)
+    {
+        printf("w!\n");
+        sprintf(XZ->beizhu, "系统提醒！");
+        sprintf(XZ->xinxi, "该用户已不是你的好友，无法发送信息！\n");
+        send(sfd, XZ, sizeof(LIAOT), 0);
+        return ;
+    }
+    
     strncpy(YY->jl, getjl_from_id(YY->m_id, YY->y_id), sizeof(YY->jl));
     //printf("YY->jl = %s\tYY->m_id = %d\n",YY->jl,YY->m_id);
     sprintf(A, "select xinxi from %s where end_id = %d and zt = 1", YY->jl, YY->m_id);
@@ -2247,7 +2259,7 @@ void HY_send(XINXI *YY,int sfd)                       //将未读信息发送给
 void HY_get(XINXI *YY, int id, int sfd)
 {
     //printf("CCCCCCCCCCCcCCCCC\n");
-    char A[200];//B[50],buf[50],beizhu[20];
+    char A[400];//B[50],buf[50],beizhu[20];
     int ret;//,field,zt;   
     //TX(YY);
     //printf("YY->buf: %s\n", YY->buf);
@@ -2278,7 +2290,6 @@ void HY_get(XINXI *YY, int id, int sfd)
             //printf("%s\n",A);
             
             ret = mysql_query(conn,A);
-            //printf("ret = %d\n\n\n", ret);
             //printf("DDDDDDDDDDDDDDDDDDDDDDDD\n");
         }
     }
