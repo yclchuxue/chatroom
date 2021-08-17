@@ -287,6 +287,7 @@ void C_group_com(XINXI *YY, DENN *XX, int socket_fd)      //群聊天
 			if(strcmp(buf, "ok") != 0)
 			{
 				printf("\t\t%s",buf);
+				sleep(1);
 				return ;
 			}
 			//fflush(stdin);
@@ -1186,7 +1187,7 @@ void *thread(void *arg)
 		{
 			for(int i = 0;i<n;i++)
 			{
-				//printf("\b\b\b\b\b\b                 \n");
+				printf("\b\b\b\b\b\b                 \n");
 				char buf[1024]={0};
 				//read(socket_fd,buf,sizeof(buf));
 				recv(Socket_fd, &XZ, sizeof(LIAOT), 0);
@@ -1238,6 +1239,8 @@ void C_haoyouliaot(XINXI *YY, DENN *XX, int socket_fd)
 			if(strcmp(buf, "OK") != 0)
 			{
 				printf("\t\t%s",buf);
+				sleep(1);
+				return ;
 			}
 			//fflush(stdin);
 			Y_ID = id;
