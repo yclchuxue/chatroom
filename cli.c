@@ -10,13 +10,13 @@ void get_XX(int socket_fd)
 
 	do
 	{
-	
 		recv(socket_fd, buf, sizeof(buf), 0);
 		if(strcmp(buf, "over") == 0)
 		{
 			break;
 		}
-		printf("\t\t%s\n", buf);
+		if(buf[0] == '5')
+			printf("\t\t%s\n", buf);
 	}while(1);
 	//printf("SSSSSS\n");
 }
