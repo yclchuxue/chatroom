@@ -92,15 +92,7 @@ int main()
 			printf("\t\t***********6 文件传输******************\n");
 			printf("\t\t***********0 退出帐号 *****************\n");
 			printf("\t\t请输入你的选择：");
-			setbuf(stdin, NULL);
 			scanf("%d", &ice);
-			setbuf(stdin, NULL);
-			if(ice < 0 || ice > 6)
-			{
-				printf("\t\t没有此选项,1秒后请重新选择！！！\n");
-				sleep(1);
-				continue;
-			}
 			printf("\033c");
 			if(ice == 1)        //好友管理
 			{

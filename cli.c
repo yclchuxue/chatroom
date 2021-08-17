@@ -50,6 +50,8 @@ void C_document(XINXI *YY, int socket_fd)
 		strncpy(file_name, basename(file_path), sizeof(file_name));
 
 		fd = open(file_path, O_RDWR);
+		//printf("%s\n", file_path);
+		
 		if(fd == -1)
 		{
 			printf("\t\t打开文件失败！！！\n");
@@ -386,6 +388,7 @@ void C_group(XINXI *YY, DENN *XX, int socket_fd)
 		printf("\t\t请输入你的选择：");
 		setbuf(stdin, NULL);
 		scanf("%d", &ic);
+		setbuf(stdin, NULL);
 		printf("\033c");
 		if(ic == 0)         //退出循环
 		{
@@ -401,16 +404,21 @@ void C_group(XINXI *YY, DENN *XX, int socket_fd)
 			printf("\t\t请输入你的选择：");
 			setbuf(stdin, NULL);
 			scanf("%s", &buf);
+			setbuf(stdin, NULL);
 			printf("\033c");
 			if(strcmp(buf, "A") == 0)
 			{
 				YY->ice_3 = 311;
 				YY->m_id  = M_ID;
-				printf("\t\t群ID：");
+				printf("\t\t群ID(数字)：");
+				setbuf(stdin, NULL);
 				scanf("%d", &id);
+				setbuf(stdin, NULL);
 				YY->q_id = id;
 				printf("\t\t群名：");
+				setbuf(stdin, NULL);
 				scanf("%s", &name);
+				setbuf(stdin, NULL);
 				//printf("name = %s\n", name);
 				strncpy(YY->name, name, sizeof(YY->name));
 				//printf("YY->name = %s\n",YY->name);
@@ -420,7 +428,9 @@ void C_group(XINXI *YY, DENN *XX, int socket_fd)
 				printf("\t\t       \t[R] 退出\n");
 				printf("\t\t群类型：");
 				//fflush(stdin);
+				setbuf(stdin, NULL);
 				scanf("%s", &buf);
+				setbuf(stdin, NULL);
 				if(strcmp(buf, "A") == 0)
 				{
 					YY->zt = 1;
@@ -429,18 +439,24 @@ void C_group(XINXI *YY, DENN *XX, int socket_fd)
 				{
 					YY->zt = 2;
 					printf("\t\t问题：");
+					setbuf(stdin, NULL);
 					scanf("%s", &qu);
+					setbuf(stdin, NULL);
 					strncpy(YY->qu, qu, sizeof(qu));
 					printf("\t\t答案：");
+					setbuf(stdin, NULL);
 					scanf("%s",&an);
+					setbuf(stdin, NULL);
 					strncpy(YY->an, an, sizeof(an));
 				}
 				else if(strcmp(buf, "C") == 0)
 				{
 					YY->zt = 0;
 				}
-				else if(strcmp(buf, "R") == 0)
+				else
 				{
+					printf("输入有误，1秒后退出!!!\n");
+					sleep(1);
 					continue;
 				}
 				send(socket_fd, YY, sizeof(XINXI), 0);
@@ -455,8 +471,10 @@ void C_group(XINXI *YY, DENN *XX, int socket_fd)
 			{
 				YY->ice_3 = 312;
 				YY->m_id  = M_ID;
-				printf("\t\t群ID：");
+				printf("\t\t群ID（数字）：");
+				setbuf(stdin, NULL);
 				scanf("%d", &id);
+				setbuf(stdin, NULL);
 				YY->q_id = id;
 				send(socket_fd, YY, sizeof(XINXI),0);
 				//printf("AAAA\n");
@@ -482,12 +500,15 @@ void C_group(XINXI *YY, DENN *XX, int socket_fd)
 			printf("\t\t请输入你的选择：");
 			setbuf(stdin, NULL);
 			scanf("%s", &buf);
+			setbuf(stdin, NULL);
 			printf("\033c");
 			if(strcmp(buf, "A") == 0)
 			{
 				YY->ice_3 = 321;
 				printf("\t\t请输入群ID：");
+				setbuf(stdin, NULL);
 				scanf("%d", &id);
+				setbuf(stdin, NULL);
 				YY->q_id = id;
 				send(socket_fd, YY, sizeof(XINXI),0);
 				recv(socket_fd, XZ, sizeof(LIAOT), 0);
@@ -496,7 +517,9 @@ void C_group(XINXI *YY, DENN *XX, int socket_fd)
 					printf("\t\t回答正确问题才能加入！！！\n");
 					printf("\t\t问题：%s\n", XZ->qu);
 					printf("\t\t答案：");
+					setbuf(stdin, NULL);
 					scanf("%s", &an);
+					setbuf(stdin, NULL);
 					if(strcmp(an, XZ->an) == 0)
 					{
 						YY->ice_1 = 3;
@@ -521,7 +544,9 @@ void C_group(XINXI *YY, DENN *XX, int socket_fd)
 			{
 				YY->ice_3 = 322;
 				printf("\t\t请输入群ID：");
+				setbuf(stdin, NULL);
 				scanf("%d", &id);
+				setbuf(stdin, NULL);
 				YY->q_id = id;
 				send(socket_fd, YY, sizeof(XINXI),0);
 				recv(socket_fd, buf, sizeof(buf), 0);
@@ -531,7 +556,7 @@ void C_group(XINXI *YY, DENN *XX, int socket_fd)
 				getchar();
 				setbuf(stdin, NULL);
 			}
-			else if(strcmp(buf, "R") == 0)
+			else
 			{
 				continue;
 			}
@@ -549,6 +574,7 @@ void C_group(XINXI *YY, DENN *XX, int socket_fd)
 				printf("\t\t请输入你的选择：");
 				setbuf(stdin, NULL);
 				scanf("%s", &buf);
+				setbuf(stdin, NULL);
 				printf("\033c");
 				if(strcmp(buf, "A") == 0)
 				{
@@ -575,7 +601,9 @@ void C_group(XINXI *YY, DENN *XX, int socket_fd)
 				{
 					YY->ice_3 = 332;
 					printf("\t\t群ID：");
+					setbuf(stdin, NULL);
 					scanf("%d", &id);
+					setbuf(stdin, NULL);
 					YY->q_id = id;
 					send(socket_fd, YY, sizeof(XINXI),0);
 					//recv(socket_fd, buf, sizeof(buf), 0);
@@ -592,7 +620,7 @@ void C_group(XINXI *YY, DENN *XX, int socket_fd)
 						}
 					}while(strcmp(buf, "over") != 0);
 				}
-				else if(strcmp(buf, "R") == 0)
+				else
 				{
 					break;
 				}
@@ -607,7 +635,9 @@ void C_group(XINXI *YY, DENN *XX, int socket_fd)
 			YY->ice_2 = 34;
 			YY->m_id  = M_ID;
 			printf("\t\t群ID：");
+			setbuf(stdin, NULL);
 			scanf("%d",&id);
+			setbuf(stdin, NULL);
 			YY->q_id = id;
 			send(socket_fd, YY, sizeof(XINXI),0);
 			int DAY = 0, year, month, day;
@@ -833,7 +863,9 @@ void C_haoy(XINXI *YY, DENN *XX, int socket_fd)
 		printf("\t\t******************4 查看聊天记录****************\n");
 		printf("\t\t****************5 屏蔽好友消息******************\n");
 		printf("\t\t请输入要选择的功能：");
+		setbuf(stdin, NULL);
 		scanf("%d", &ic);
+		setbuf(stdin, NULL);
 		printf("\033c");
 		if(ic == 1)      //添加,删除，查询好友
 		{
@@ -1361,16 +1393,21 @@ void C_zhuce(XINXI *YY, int socket_fd)
 	
 		setbuf(stdin, NULL);
 		printf("\033c");
-		printf("\t\tID:");
+		printf("\t\tID(数字):");
 		scanf("%d",&I);
+		setbuf(stdin, NULL);
 		printf("\t\tPassword:");
 		scanf("%s",P);
+		setbuf(stdin, NULL);
 		printf("\t\tName: ");
 		scanf("%s",name);
+		setbuf(stdin, NULL);
 		printf("\t\t请设置密保问题：");
 		scanf("%s",qu);
+		setbuf(stdin, NULL);
 		printf("\t\t请输入答案：");
 		scanf("%s",an);
+		setbuf(stdin, NULL);
 		YY->m_id = I;
 		sprintf(hylb, "%shylb", name);
 		strncpy(YY->password, P, sizeof(P));
@@ -1400,6 +1437,7 @@ void C_zhaohui(XINXI *YY, int socket_fd)
 		printf("\033c");
 		printf("\t\t请输入你的id：");
 		scanf("%d",&I);
+		setbuf(stdin, NULL);
 		YY->m_id = I;
 		send(socket_fd, YY, sizeof(XINXI),0);      //将ID发送到服务器
 		read(socket_fd, qu, sizeof(qu));          //读取密保问题
@@ -1433,7 +1471,9 @@ void face(XINXI *YY)
 	    printf("\t\t/************3 找回密码*************/\n");
 		printf("\t\t/************0 退出程序*************/\n");
 	    printf("\t\t请选择：");
+		setbuf(stdin, NULL);
 		scanf("%d",&n);
+		setbuf(stdin, NULL);
 		if(n == 0)
 		{
 			exit(0);
