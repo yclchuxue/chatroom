@@ -74,12 +74,14 @@ int main()
 				printf("无此功能，请重新选择！\n");
 			}
 		}while(1);
-
+		printf("AAA\n");
 		do{  
 			int ice;
 			setbuf(stdin, NULL);
 			printf("\033c");
+			printf("CCCCC\n");
 			get_XX(socket_fd);
+			printf("BBB\n");
 			memset(&YY, 0, sizeof(XINXI));
 			printf("\t\t*************************************\n");
 			printf("\t\t***********1 好友管理******************\n");
