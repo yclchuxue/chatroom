@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <mariadb/mysql.h>
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netdb.h>
@@ -14,7 +13,7 @@
 #include <assert.h>
 #include <libgen.h>//basename():从路径中获取文件名及后缀
 
-MYSQL *conn;
+
 #define OPEN_MAX 1024
 
 typedef struct xinxi{
