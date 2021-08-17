@@ -219,7 +219,7 @@ void *thread_g(void *arg)
 	XINXI YY;
 	do
 	{
-		sleep(5);
+		sleep(1);
 		//printf("AAAAAA\n");
 		//pthread_mutex_lock(&lock);              //加锁
 		YY.ice_4 = 999;
@@ -245,6 +245,11 @@ void *thread_g(void *arg)
 			{
 				printf("\t\t\033[31mMINE :");
 			}
+		}
+		if(n == -1)
+		{
+			printf("系统提示：你已经不是该群成员，无法发送和接收信息！\n");
+			break;
 		}
 		
 	}while(M == 1);
